@@ -38,36 +38,27 @@ void setup() {
   randomSeed(analogRead(0)); // Usa una entrada analógica sin conectar para generar una semilla aleatoria
 } // end of setup
 
+void cambiarHumor(int nuevoHumor) {
+  switch (nuevoHumor) {
+    case 0:
+      roboEyes.setMood(TIRED);
+      break;
+    case 1:
+      roboEyes.setMood(ANGRY);
+      break;
+    case 2:
+      roboEyes.setMood(HAPPY);
+      break;
+    case 3:
+      roboEyes.setMood(DEFAULT);
+      break;
+  }
+} 
 
-void loop() {
-  unsigned long currentMillis = millis(); // Obtiene el tiempo actual
 
-  // Verifica si ha pasado el intervalo de tiempo
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis; // Guarda el tiempo actual
-
-    // Genera un número aleatorio entre 0 y 3
-    int randomMood = random(0, 4); // random(min, max) -> genera un número entre min (inclusive) y max (exclusivo)
-
-    // Cambia el estado del humor según el número aleatorio
-    switch (randomMood) {
-      case 0:
-        roboEyes.setMood(TIRED);
-        break;
-      case 1:
-        roboEyes.setMood(ANGRY);
-        break;
-      case 2:
-        roboEyes.setMood(HAPPY);
-        break;
-      case 3:
-        roboEyes.setMood(DEFAULT);
-        break;
-    }
-
-    // Opcional: Imprime el estado de humor seleccionado en el monitor serial
-    Serial.print("Cambiando a modo: ");
-    switch (randomMood) {
+void imprimirHumor(int humor) {
+  Serial.print("Cambiando a modo: ");
+    switch (humor) {
       case 0:
         Serial.println("TIRED");
         break;
@@ -81,6 +72,26 @@ void loop() {
         Serial.println("DEFAULT");
         break;
     }
+
+}
+
+void loop() {
+  int randomMood;
+  unsigned long currentMillis = millis(); // Obtiene el tiempo actual
+  
+  // Verifica si ha pasado el intervalo de tiempo
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis; // Guarda el tiempo actual
+
+    // Genera un número aleatorio entre 0 y 3
+    randomMood = random(0, 4); // random(min, max) -> genera un número entre min (inclusive) y max (exclusivo)
+
+    // Cambia el estado del humor según el número aleatorio
+    cambiarHumor(randomMood);
+
+    // Opcional: Imprime el estado de humor seleccionado en el monitor serial
+    imprimirHumor(randomMood);
+    
   }
 
   roboEyes.update(); // Actualiza los ojos
